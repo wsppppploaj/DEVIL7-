@@ -1,0 +1,555 @@
+repeat task.wait() until game:IsLoaded()
+warn("[DEVIL7] build v3 - Steal tab")
+
+-- ===================== INTRO SEQUENCE =====================
+do
+    local _introShouldPlay = true
+    if _introShouldPlay then
+	local _TS = game:GetService("TweenService")
+	local _SS = game:GetService("SoundService")
+	local _PL = game:GetService("Players").LocalPlayer
+	local _PG = _PL:WaitForChild("PlayerGui")
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "DEVIL7Intro"
+	screenGui.ResetOnSpawn = false
+	screenGui.IgnoreGuiInset = true
+	screenGui.DisplayOrder = 999
+	screenGui.Parent = _PG
+
+	-- Background
+	local bg = Instance.new("Frame")
+	bg.Size = UDim2.new(1,0,1,0)
+	bg.BackgroundColor3 = Color3.new(0,0,0)
+	bg.BackgroundTransparency = 0.95
+	bg.BorderSizePixel = 0
+	bg.Parent = screenGui
+
+	-- Helper function to add animated gradient to text
+	local function addAnimatedGradient(textLabel)
+		local uiGradient = Instance.new("UIGradient", textLabel)
+		-- Black to white gradient
+		uiGradient.Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),      -- Black
+			ColorSequenceKeypoint.new(0.3, Color3.fromRGB(80, 80, 80)), -- Dark gray
+			ColorSequenceKeypoint.new(0.6, Color3.fromRGB(180, 180, 180)), -- Light gray
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)) -- White
+		})
+		uiGradient.Rotation = 135
+		uiGradient.Enabled = true
+		return uiGradient
+	end
+
+	-- Helper function to animate gradient rotation SLOWLY
+	local function animateGradientSlow(gradient, duration, fromRotation, toRotation)
+		local rotationTween = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1) -- -1 = infinite loop
+		_TS:Create(gradient, rotationTween, {Rotation = toRotation}):Play()
+		gradient.Rotation = fromRotation
+	end
+
+	-- DEVIL7 HUB text
+	local devil7HubText = Instance.new("TextLabel")
+	devil7HubText.Size = UDim2.new(0, 300, 0, 60)
+	devil7HubText.Position = UDim2.new(0.5, -150, 0.35, 0)
+	devil7HubText.BackgroundTransparency = 1
+	devil7HubText.Text = "DEVIL7"
+	devil7HubText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	devil7HubText.TextSize = 42
+	devil7HubText.FontFace = Font.new("rbxasset://fonts/families/Bangers.json")
+	devil7HubText.TextScaled = false
+	devil7HubText.TextTransparency = 1
+	devil7HubText.Parent = bg
+	local devil7Gradient = addAnimatedGradient(devil7HubText)
+
+	-- Discord text
+	local discordText = Instance.new("TextLabel")
+	discordText.Size = UDim2.new(0, 220, 0, 40)
+	discordText.Position = UDim2.new(0.5, -110, 0.5, 0)
+	discordText.BackgroundTransparency = 1
+	discordText.Text = "OWNS BY DEVIL7"
+	discordText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	discordText.TextSize = 20
+	discordText.FontFace = Font.new("rbxasset://fonts/families/Bangers.json")
+	discordText.TextScaled = false
+	discordText.TextTransparency = 1
+	discordText.Parent = bg
+	local discordGradient = addAnimatedGradient(discordText)
+
+	-- Credits text
+	local creditsText = Instance.new("TextLabel")
+	creditsText.Size = UDim2.new(0, 280, 0, 35)
+	creditsText.Position = UDim2.new(0.5, -140, 0.6, 0)
+	creditsText.BackgroundTransparency = 1
+	creditsText.Text = "Made by DEVIL7"
+	creditsText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	creditsText.TextSize = 16
+	creditsText.FontFace = Font.new("rbxasset://fonts/families/Bangers.json")
+	creditsText.TextScaled = false
+	creditsText.TextTransparency = 1
+	creditsText.Parent = bg
+	local creditsGradient = addAnimatedGradient(creditsText)
+
+	-- Play sound
+	local sound = Instance.new("Sound")
+	sound.SoundId = "rbxassetid://124960576403330"
+	sound.Volume = 1
+	sound.Looped = false
+	sound.Parent = _SS
+	sound:Play()
+
+	-- Fade IN background
+	local bgFadeIn = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	_TS:Create(bg, bgFadeIn, {BackgroundTransparency = 0.95}):Play()
+
+	task.wait(0.3)
+
+	-- STEP 1: DEVIL7 HUB fades in + slides LEFT + start SLOW gradient animation
+	_TS:Create(devil7HubText, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
+	
+	local devil7Slide = TweenInfo.new(2.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local devil7Target = UDim2.new(0.25, -150, 0.35, 0)
+	_TS:Create(devil7HubText, devil7Slide, {Position = devil7Target}):Play()
+	
+	-- SLOW gradient animation (8 seconds for full rotation instead of 3)
+	animateGradientSlow(devil7Gradient, 8, 135, 495)
+
+	task.wait(1.2)
+
+	-- STEP 2: Discord text fades in + slides LEFT + start SLOW gradient animation
+	_TS:Create(discordText, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
+	
+	local discordSlide = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local discordTarget = UDim2.new(0.25, -110, 0.5, 0)
+	_TS:Create(discordText, discordSlide, {Position = discordTarget}):Play()
+	
+	-- SLOW gradient animation
+	animateGradientSlow(discordGradient, 8, 135, 495)
+
+	task.wait(1)
+
+	-- STEP 3: Credits text fades in + slides LEFT + start SLOW gradient animation
+	_TS:Create(creditsText, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
+	
+	local creditsSlide = TweenInfo.new(1.8, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local creditsTarget = UDim2.new(0.25, -140, 0.6, 0)
+	_TS:Create(creditsText, creditsSlide, {Position = creditsTarget}):Play()
+	
+	-- SLOW gradient animation
+	animateGradientSlow(creditsGradient, 8, 135, 495)
+
+	task.wait(1.5)
+
+	-- Fade OUT sound (volume lowers gradually)
+	local soundFadeOut = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	_TS:Create(sound, soundFadeOut, {Volume = 0}):Play()
+
+	-- Fade OUT everything together
+	local fadeOut = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	_TS:Create(bg, fadeOut, {BackgroundTransparency = 1}):Play()
+	_TS:Create(devil7HubText, fadeOut, {TextTransparency = 1}):Play()
+	_TS:Create(discordText, fadeOut, {TextTransparency = 1}):Play()
+	_TS:Create(creditsText, fadeOut, {TextTransparency = 1}):Play()
+
+	task.wait(1.2)
+	screenGui:Destroy()
+	sound:Stop()
+	sound:Destroy()
+    end -- if _introShouldPlay
+end
+
+print("DEVIL7 intro complete!")
+
+
+--// حط سكربتك القديم هنا-- Compilacion de compatibilidad sin pragma
+	-- Eclipse Hub																																											
+	-- Luarmor/Luraph 14.8/14.9 compatibility shim. Luarmor replaces the macro
+	-- while obfuscating; the identity fallback keeps the source runnable as-is.
+	if not LPH_OBFUSCATED then
+	LPH_NO_VIRTUALIZE = function(callback)
+	return callback
+	end
+	end
+
+	-- Luarmor sigue renombrando y ofuscando este bloque, pero no lo ejecuta
+	-- dentro de su VM. El script registra muchos callbacks por frame y la VM
+	-- multiplicaba su coste, especialmente al activar Anti Lag.
+	;LPH_NO_VIRTUALIZE(function()
+
+	-- Compatibilidad entre executors: algunos publican la misma API con aliases.	
+	-- Se normaliza el entorno, sin cambiar el comportamiento de las funciones.
+	do
+	local scriptEnv = _G
+	pcall(function()
+	if type(getfenv) == "function" then scriptEnv = getfenv(0) end
+	end)
+	local sharedEnv = scriptEnv
+	pcall(function()
+	if type(getgenv) == "function" then sharedEnv = getgenv() end
+	end)
+	if type(scriptEnv) ~= "table" then scriptEnv = _G end
+	if type(sharedEnv) ~= "table" then sharedEnv = scriptEnv end
+
+	local hiddenSetter = rawget(scriptEnv, "sethiddenproperty")
+	or rawget(sharedEnv, "sethiddenproperty")
+	or rawget(scriptEnv, "set_hidden_property")
+	or rawget(sharedEnv, "set_hidden_property")
+	or rawget(scriptEnv, "sethiddenprop")
+	or rawget(sharedEnv, "sethiddenprop")
+	local synApi = rawget(scriptEnv, "syn") or rawget(sharedEnv, "syn")
+	if type(hiddenSetter) ~= "function" and type(synApi) == "table" then
+	hiddenSetter = rawget(synApi, "sethiddenproperty") or rawget(synApi, "set_hidden_property")
+	end
+	if type(hiddenSetter) == "function" then
+	pcall(function() rawset(scriptEnv, "sethiddenproperty", hiddenSetter) end)
+	pcall(function() rawset(sharedEnv, "sethiddenproperty", hiddenSetter) end)
+	end
+	-- Quitar el límite del executor desde el principio. Algunos executors
+	-- interpretan 0 como "volver a 60 FPS", así que usamos un techo práctico
+	-- muy alto. Si no existe la API, no interrumpe el resto del script.
+	local fpsCapSetter = rawget(scriptEnv, "setfpscap")
+	or rawget(sharedEnv, "setfpscap")
+	or rawget(scriptEnv, "set_fps_cap")
+	or rawget(sharedEnv, "set_fps_cap")
+	or rawget(scriptEnv, "setfpslimit")
+	or rawget(sharedEnv, "setfpslimit")
+	if type(fpsCapSetter) ~= "function" and type(synApi) == "table" then
+	fpsCapSetter = rawget(synApi, "setfpscap") or rawget(synApi, "set_fps_cap")
+	end
+	if type(fpsCapSetter) == "function" then pcall(fpsCapSetter, 9999) end
+	end
+
+	local Players, UserInputService, TweenService, RunService, ReplicatedStorage,
+	Lighting, HttpService, Player, isMobile = (function()
+	local players = game:GetService("Players")
+	local input = game:GetService("UserInputService")
+	-- GetPlatform puede no estar disponible; conservar la deteccion tactil.
+	local mobile = input.TouchEnabled
+	pcall(function()
+	local platform = input:GetPlatform()
+	mobile = input.TouchEnabled and (
+	platform == Enum.Platform.Android
+	or platform == Enum.Platform.IOS
+	or not input.MouseEnabled
+	)
+	end)
+
+	return players,
+	input,
+	game:GetService("TweenService"),
+	game:GetService("RunService"),
+	game:GetService("ReplicatedStorage"),
+	game:GetService("Lighting"),
+	game:GetService("HttpService"),
+	players.LocalPlayer,
+	mobile
+	end)()
+
+	-- Wave puede cerrar el cliente al combinar hooks globales de metamethods con
+	-- codigo protegido por Luarmor. Detectarlo una vez permite conservar las
+	-- funciones normales y usar el motor de velocidad directo sin esos hooks.
+	local executorName = "unknown"
+	do
+	local executorEnv = _G
+	pcall(function()
+	if type(getgenv) == "function" then executorEnv = getgenv() end
+	end)
+	if type(executorEnv) ~= "table" then executorEnv = _G end
+	local identify = rawget(executorEnv, "identifyexecutor")
+	or rawget(executorEnv, "getexecutorname")
+	or (type(_G) == "table" and (rawget(_G, "identifyexecutor") or rawget(_G, "getexecutorname")))
+	if type(identify) == "function" then
+	pcall(function()
+	local name = identify()
+	if name ~= nil then executorName = tostring(name) end
+	end)
+	end
+	end
+	local waveSafeMode = string.find(string.lower(executorName), "wave", 1, true) ~= nil
+	_G.__CrystalWaveSafeMode = waveSafeMode
+
+	-- ==================== RESET TOTAL DE LA INSTANCIA ANTERIOR ====================
+	-- Al re-ejecutar Crystal, la instancia previa se elimina POR COMPLETO:
+	-- UI, keybinds, loops, toggles y rastros en los personajes.
+	do
+	local guiRootNames = {
+	"Eclipse_Panel", "EclipseHub", "CRYSTAL_Panel", "DashEffectGui", "CrystalAutoGrabBar",
+	"CrystalLaggerGUI", "CrystalBypassGUI", "CrystalMobileUI",
+	"CrystalEnemyWidget",
+	}
+
+	-- 1) Parar y desconectar todo lo que la instancia previa registró
+	-- El Bypass antiguo mantenia un task.spawn propio fuera del registro global.
+	-- Detenerlo antes de destruir su GUI evita acumular un emisor por reejecucion.
+	pcall(function()
+	local oldBypass = _G.CrystalBypass
+	if oldBypass then
+	if oldBypass.Stop then
+	oldBypass.Stop()
+	else
+	-- Las versiones antiguas no exponian Stop. Desactivar tambien el modo
+	-- automatico evita que su listener huerfano vuelva a arrancar el hilo.
+	if oldBypass.SetAutoOnSteal then oldBypass.SetAutoOnSteal(false) end
+	if oldBypass.SetBypass then oldBypass.SetBypass(false) end
+	end
+	end
+	end)
+	-- Lagger tambien mantiene hilos propios fuera de las conexiones globales.
+	-- Detenerlos antes de construir la nueva instancia evita acumular payloads
+	-- al reejecutar, una causa frecuente de cierre por memoria en telefono.
+	pcall(function()
+	local oldLagger = _G.CrystalLagger
+	if oldLagger then
+	if oldLagger.Stop then
+	oldLagger.Stop()
+	else
+	if oldLagger.SetEnabled then oldLagger.SetEnabled(false) end
+	if oldLagger.SetLowEndEnabled then oldLagger.SetLowEndEnabled(false) end
+	end
+	end
+	end)
+	if _G.__CRYSTAL_STATE then
+	_G.__CRYSTAL_STATE.alive = false
+	pcall(function()
+	for _, stopper in ipairs(_G.__CRYSTAL_STATE.stoppers or {}) do pcall(stopper) end
+	for _, conn in ipairs(_G.__CRYSTAL_STATE.conns or {}) do pcall(function() conn:Disconnect() end) end
+	end)
+	end
+	_G.__CRYSTAL_STATE = nil
+	_G.__CrystalTrackConn = nil
+	_G.__CrystalTrackStopper = nil
+
+	-- 2) Conexiones conocidas guardadas en _G
+	pcall(function()
+	if _G.__speedBoostConn then _G.__speedBoostConn:Disconnect(); _G.__speedBoostConn = nil end
+	end)
+	pcall(function() if _G.__stopSpeedBoost then _G.__stopSpeedBoost() end end)
+	-- Las versiones anteriores restauraban el limite de salida a 0 al cerrar
+	-- Bypass/Lagger. Eso puede cortar la replicacion del personaje y dejarlo
+	-- desincronizado incluso con todos los toggles apagados.
+	pcall(function()
+	game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
+	end)
+
+	-- 3) Destruir TODAS las GUIs raíz de la versión anterior
+	pcall(function()
+	local coreGui = game:GetService("CoreGui")
+	for _, container in ipairs({ coreGui, Player.PlayerGui }) do
+	for _, name in ipairs(guiRootNames) do
+	while true do
+	local found = container:FindFirstChild(name)
+	if not found then break end
+	found:Destroy()
+	end
+	end
+	end
+	end)
+
+	-- 4) Limpiar rastros en personajes (billboards de velocidad, overheads...)
+	pcall(function()
+	for _, plr in ipairs(Players:GetPlayers()) do
+	local ch = plr.Character
+	if ch then
+	for _, part in ipairs(ch:GetChildren()) do
+	for _, child in ipairs(part:GetChildren()) do
+	if child.Name == "GreenDuelsBB" or child.Name == "CrystalSpeedBill" or child.Name == "CrystalHubOverhead"
+	or child.Name == "CrystalAimbotBodyLock" or child.Name == "CrystalAimbotBodyAttachment"
+	or child.Name == "CrystalTPBatMarkerBodyLock" or child.Name == "CrystalTPBatMarkerAttachment" then
+	child:Destroy()
+	end
+	end
+	end
+	end
+	end
+	end)
+
+	-- 5) Registro para la NUEVA instancia: la próxima ejecución borrará esto
+	_G.__CRYSTAL_STATE = { conns = {}, stoppers = {}, alive = true }
+	_G.__CrystalTrackConn = function(conn)
+	if conn then table.insert(_G.__CRYSTAL_STATE.conns, conn) end
+	return conn
+	end
+	_G.__CrystalTrackStopper = function(fn)
+	if fn then table.insert(_G.__CRYSTAL_STATE.stoppers, fn) end
+	end
+	_G.__CrystalResetHooks = {}
+	_G.__CrystalOnNewInstance = function(fn)
+	if fn then table.insert(_G.__CrystalResetHooks, fn) end
+	end
+	end
+	local crystalRuntimeState = _G.__CRYSTAL_STATE
+	-- Un único planificador comparte los recorridos pesados del mapa y de la UI.
+	-- Cada frame consume como máximo ~0.8 ms, evitando que varios optimizadores
+	-- hagan picos de trabajo simultáneos.
+	do
+	local traversalJobs = {}
+	local traversalConnection = nil
+	local function ensureTraversalRunner()
+	if traversalConnection then return end
+	traversalConnection = RunService.Heartbeat:Connect(function()
+	local deadline = os.clock() + 0.0008
+	while traversalJobs[1] and os.clock() < deadline do
+	local job = traversalJobs[1]
+	if job.cancelled or (job.continue and not job.continue()) then
+	table.remove(traversalJobs, 1)
+	else
+	local object = job.pending[#job.pending]
+	if not object then
+	table.remove(traversalJobs, 1)
+	else
+	job.pending[#job.pending] = nil
+	pcall(job.apply, object)
+	local ok, children = pcall(function() return object:GetChildren() end)
+	if ok then
+	for _, child in ipairs(children) do job.pending[#job.pending + 1] = child end
+	end
+	-- Rotar trabajos para que Anti Lag, Optimizer y temas progresen juntos.
+	if traversalJobs[2] then
+	table.remove(traversalJobs, 1)
+	traversalJobs[#traversalJobs + 1] = job
+	end
+	end
+	end
+	end
+	if not traversalJobs[1] then
+	traversalConnection:Disconnect()
+	traversalConnection = nil
+	end
+	end)
+	_G.__CrystalTrackConn(traversalConnection)
+	end
+	_G.__CrystalWalkDescendantsBatched = function(roots, apply, shouldContinue)
+	local job = { pending = {}, apply = apply, continue = shouldContinue, cancelled = false }
+	if typeof(roots) == "Instance" then roots = { roots } end
+	for _, root in ipairs(roots or {}) do
+	if root then
+	local ok, children = pcall(function() return root:GetChildren() end)
+	if ok then for _, child in ipairs(children) do job.pending[#job.pending + 1] = child end end
+	end
+	end
+	traversalJobs[#traversalJobs + 1] = job
+	ensureTraversalRunner()
+	return function() job.cancelled = true end
+	end
+	_G.__CrystalTrackStopper(function()
+	for _, job in ipairs(traversalJobs) do job.cancelled = true end
+	traversalJobs = {}
+	if traversalConnection then traversalConnection:Disconnect(); traversalConnection = nil end
+	end)
+	end
+	local CONFIG_FILE = "CrystalHub_UI_Config.txt"
+
+	do
+	-- Anti Die de Sacar cosas.txt. El interruptor de la GUI tiene prioridad
+	-- sobre cualquier peticion de apagado de Auto Bat u otra funcion.
+	local antiDieEnabled = false
+	local antiDieStopped = false
+	_G.__CrystalAntiDieGuiEnabled = nil
+	local antiDieCharConns = {}
+	local antiDieCharAddedConn = nil
+
+	local function clearCharEntry(char, restore)
+	local entry = antiDieCharConns[char]
+	if entry then
+	if entry.healthConn then pcall(function() entry.healthConn:Disconnect() end) end
+	if entry.diedConn then pcall(function() entry.diedConn:Disconnect() end) end
+	if entry.cleanupConn then pcall(function() entry.cleanupConn:Disconnect() end) end
+	antiDieCharConns[char] = nil
+	end
+	if restore and char and char.Parent then
+	pcall(function()
+	local hum = char:FindFirstChildOfClass("Humanoid")
+	if hum then
+	hum.BreakJointsOnDeath = true
+	hum:SetStateEnabled(Enum.HumanoidStateType.Dead, true)
+	end
+	end)
+	end
+	end
+
+	local function applyAntiDieToCharacter(char)
+	if not char or not char.Parent then return end
+	local hum = char:FindFirstChildOfClass("Humanoid")
+	if not hum then return end
+
+	clearCharEntry(char, false)
+
+	hum.BreakJointsOnDeath = false
+	hum:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+
+	local entry = { humanoid = hum }
+	entry.healthConn = hum:GetPropertyChangedSignal("Health"):Connect(function()
+	if antiDieEnabled and antiDieCharConns[char] == entry and hum.Health <= 0 then
+	hum.Health = hum.MaxHealth
+	end
+	end)
+
+	entry.diedConn = hum.Died:Connect(function()
+	task.defer(function()
+	if antiDieEnabled and antiDieCharConns[char] == entry and hum and hum.Parent then
+	hum.BreakJointsOnDeath = false
+	hum:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+	hum.Health = hum.MaxHealth
+	end
+	end)
+	end)
+
+	entry.cleanupConn = char.AncestryChanged:Connect(function()
+	if not char.Parent then
+	clearCharEntry(char, false)
+	end
+	end)
+
+	antiDieCharConns[char] = entry
+	end
+
+	local function setAntiDieEnabled(enabled)
+	enabled = enabled == true
+	if enabled == antiDieEnabled then return end
+	antiDieEnabled = enabled
+	if enabled then
+	if not antiDieCharAddedConn then
+	antiDieCharAddedConn = Player.CharacterAdded:Connect(function(char)
+	task.wait(0.2)
+	if antiDieEnabled and char and char.Parent then
+	applyAntiDieToCharacter(char)
+	end
+	end)
+	end
+	local char = Player.Character
+	if char and char.Parent and not antiDieCharConns[char] then
+	applyAntiDieToCharacter(char)
+	end
+	else
+	for char in pairs(antiDieCharConns) do
+	clearCharEntry(char, true)
+	end
+	end
+	end
+
+	-- Dos fuentes independientes piden el antidie:
+	--   "toggle"  -> toggle "Anti Die" del men  (siempre activo en gameplay)
+	--   "autobat" -> Auto Bat (activo mientras dure Auto Bat, V1)
+	-- El antidie queda activo si CUALQUIERA de las dos lo pide.
+	local antiDieSources = { toggle = false, autobat = false }
+	local function refreshAntiDie()
+	if antiDieStopped then return end
+	local manual = antiDieSources.toggle
+	if _G.__CrystalAntiDieGuiEnabled then manual = _G.__CrystalAntiDieGuiEnabled() == true end
+	setAntiDieEnabled(manual or antiDieSources.autobat)
+	end
+
+	_G.__CrystalAntiDieSource = function(source, enabled)
+	if antiDieStopped or antiDieSources[source] == nil then return end
+	antiDieSources[source] = enabled == true
+	refreshAntiDie()
+	end
+
+	_G.__CrystalAntiDieSet = function(enabled)
+	_G.__CrystalAntiDieSource("autobat", enabled)
+	end
+
+	_G.__CrystalAntiDieIsEnabled = function() return antiDieEnabled end
+
+	-- Registro para el reset total: apagar antidie y desconectar al
+	-- re-ejecutar el script.
+	_G.__CrystalTrackStopper(function()
+	antiD
